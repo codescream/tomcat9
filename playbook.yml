@@ -1,0 +1,103 @@
+---
+- hosts:  localhost
+  become: yes
+  tasks:
+  - name: patch the remote server
+    dnf:  
+      name: '*'
+      state: latest
+  - name: ensure apache is at the latest version
+    dnf:
+      name: httpd
+      state: latest
+  - name: ensure apache is running
+    service:
+      name: httpd
+      state: started
+      enabled: true
+  - name: install latest version of java
+    dnf:  
+      name: java
+      state: latest
+  - name: create tomcat user with specific shell and home dir
+    user:
+      name: tomcat
+      comment: Apache tomcat user
+      home: /opt/tomcat
+      shell: /bin/false
+  - name: download and unarchive tomcat
+    unarchive:
+      src: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.72/bin/apache-tomcat-9.0.72.tar.gz
+      dest: /tmp
+      remote_src: yes
+  - name: copy tomcat files to tomcat home folder and set tomcat as owner and group
+    copy:
+      src: /tmp/apache-tomcat-9.0.72/
+      dest: /opt/tomcat/
+      owner: tomcat
+      group: tomcat
+      mode: 0755
+      remote_src: yes
+  - name: edit tomcat manager context.xml
+    copy:
+      src: /home/ansible/playbooks/tomcat/context.xml
+      dest: /opt/tomcat/webapps/manager/META-INF/
+      owner: tomcat
+      group: tomcat
+      mode: 0755
+      remote_src: no
+  - name: edit tomcat host-manager context.xml
+    copy:
+      src: /home/ansible/playbooks/tomcat/context.xml
+      dest: /opt/tomcat/webapps/host-manager/META-INF/
+      owner: tomcat
+      group: tomcat
+      mode: 0755
+      remote_src: no
+  - name: setup user accounts
+    copy:
+      src: /home/ansible/playbooks/tomcat/tomcat-users.xml
+      dest: /opt/tomcat/conf/tomcat-users.xml
+      owner: tomcat
+      group: tomcat
+      mode: 0755
+      remote_src: no  
+  - name: create tomcat service file
+    copy:
+      src: /home/ansible/playbooks/tomcat/tomcat-service-file
+      dest: /etc/systemd/system/tomcat.service
+      owner: root
+      group: root
+      mode: 0755
+      remote_src: no
+  - name: Change tomcat root directory permissions
+    file:
+      path: /opt
+      state: directory
+      owner: tomcat
+      group: tomcat
+      mode: 0755
+      recurse: yes
+  - name: reload systemctl daemon
+    systemd:
+      daemon_reload: yes
+  - name: open port 8080 
+    firewalld:
+      port: 8080/tcp
+      permanent: yes
+      immediate: yes
+      state: enabled
+  - name: restore SELinux file context to filesystem
+    ansible.builtin.command: restorecon -Rv /opt/tomcat
+  - name: start tomcat service if not started
+    service:
+      name: tomcat
+      state: started
+      enabled: true
+  - name: download jenkins
+    get_url:
+      url: https://get.jenkins.io/war/2.373/jenkins.war
+      dest: /opt/tomcat/webapps/
+      owner: root
+      group: root
+      mode: 0755 
