@@ -40,7 +40,7 @@
       remote_src: yes
   - name: edit tomcat manager context.xml
     copy:
-      src: /context.xml
+      src: /opt/tomcat/.jenkins/workspace/ansible-playbk1/context.xml
       dest: /opt/tomcat/webapps/manager/META-INF/
       owner: tomcat
       group: tomcat
