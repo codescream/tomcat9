@@ -40,7 +40,7 @@
       remote_src: yes
   - name: edit tomcat manager context.xml
     copy:
-      src: files/context.xml
+      src: "files/context.xml"
       dest: /opt/tomcat/webapps/manager/META-INF/
       owner: tomcat
       group: tomcat
@@ -48,7 +48,7 @@
       remote_src: yes
   - name: edit tomcat host-manager context.xml
     copy:
-      src: files/context.xml
+      src: "files/context.xml"
       dest: /opt/tomcat/webapps/host-manager/META-INF/
       owner: tomcat
       group: tomcat
@@ -56,7 +56,7 @@
       remote_src: yes
   - name: setup user accounts
     copy:
-      src: files/tomcat-users.xml
+      src: "files/tomcat-users.xml"
       dest: /opt/tomcat/conf/tomcat-users.xml
       owner: tomcat
       group: tomcat
@@ -64,7 +64,7 @@
       remote_src: yes 
   - name: create tomcat service file
     copy:
-      src: files/tomcat-service-file
+      src: "files/tomcat-service-file"
       dest: /etc/systemd/system/tomcat.service
       owner: root
       group: root
