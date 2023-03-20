@@ -7,7 +7,7 @@ host_meta_inf: /opt/tomcat/webapps/host-manager/META-INF/
 context_xml: files/context.xml
 users_xml: files/tomcat-users.xml
 systemd_file: files/tomcat-service-file
-ansible_port: 8080
-ansible_proto: tcp
+ansible_port: "8080"
+ansible_proto: "tcp"
 jenkins_link: https://get.jenkins.io/war/2.373/jenkins.war
 jenkins_webapp: /opt/tomcat/webapps/
