@@ -1,5 +1,5 @@
 ---
-- hosts: Dev
+- hosts: localhost
   become: yes
   tasks:
   - name: patch the remote server
