@@ -84,7 +84,7 @@
       daemon_reload: yes
   - name: open port 8080 
     firewalld:
-      port: "{{ ansible_port }}/{{ ansible_proto }}"
+      port: "{{ port }}/{{ proto }}"
       permanent: yes
       immediate: yes
       state: enabled
