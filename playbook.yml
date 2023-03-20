@@ -33,7 +33,7 @@
       remote_src: yes
   - name: copy tomcat files to tomcat home folder and set tomcat as owner and group
     copy:
-      src: /tmp/"{{ tomcat_folder }}"/
+      src: "/tmp/{{ tomcat_folder }}/"
       dest: /opt/tomcat/
       owner: tomcat
       group: tomcat
