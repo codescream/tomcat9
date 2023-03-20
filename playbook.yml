@@ -28,9 +28,9 @@
       shell: /bin/false
   - name: download and unarchive tomcat
     unarchive:
-      src: "{{ tomcat_link }}"
+      src: "https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.72/bin/apache-tomcat-9.0.72.tar.gz"
       dest: /tmp
-      remote_src: no
+      remote_src: yes
   - name: copy tomcat files to tomcat home folder and set tomcat as owner and group
     copy:
       src: /tmp/apache-tomcat-9.0.72/
