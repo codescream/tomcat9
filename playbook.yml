@@ -27,7 +27,7 @@
       shell: /bin/false
   - name: download and unarchive tomcat
     unarchive:
-      src: "{{ tomcat-link }}"
+      src: "{{ tomcat_link }}"
       dest: /tmp
       remote_src: yes
   - name: copy tomcat files to tomcat home folder and set tomcat as owner and group
