@@ -28,12 +28,12 @@
       shell: /bin/false
   - name: download and unarchive tomcat
     unarchive:
-      src: "https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.72/bin/apache-tomcat-9.0.72.tar.gz"
+      src: "{{ tomcat_link }}"
       dest: /tmp
       remote_src: yes
   - name: copy tomcat files to tomcat home folder and set tomcat as owner and group
     copy:
-      src: /tmp/apache-tomcat-9.0.72/
+      src: /tmp/"{{ tomcat_folder }}"/
       dest: /opt/tomcat/
       owner: tomcat
       group: tomcat
@@ -41,23 +41,23 @@
       remote_src: yes
   - name: edit tomcat manager context.xml
     copy:
-      src: "files/context.xml"
-      dest: /opt/tomcat/webapps/manager/META-INF/
+      src: "{{ context_xml }}"
+      dest: "{{ meta_inf }}"
       owner: tomcat
       group: tomcat
       mode: 0755
       remote_src: no
   - name: edit tomcat host-manager context.xml
     copy:
-      src: "files/context.xml"
-      dest: /opt/tomcat/webapps/host-manager/META-INF/
+      src: "{{ context_xml }}"
+      dest: "{{ host_meta_inf }}"
       owner: tomcat
       group: tomcat
       mode: 0755
       remote_src: no
   - name: setup user accounts
     copy:
-      src: "files/tomcat-users.xml"
+      src: "{{ users_xml }}"
       dest: /opt/tomcat/conf/tomcat-users.xml
       owner: tomcat
       group: tomcat
@@ -65,7 +65,7 @@
       remote_src: no 
   - name: create tomcat service file
     copy:
-      src: "files/tomcat-service-file"
+      src: "{{ systemd_file }}"
       dest: /etc/systemd/system/tomcat.service
       owner: root
       group: root
@@ -84,7 +84,7 @@
       daemon_reload: yes
   - name: open port 8080 
     firewalld:
-      port: 8080/tcp
+      port: "{{ ansible_port }}"
       permanent: yes
       immediate: yes
       state: enabled
@@ -97,8 +97,8 @@
       enabled: true
   - name: download jenkins
     get_url:
-      url: https://get.jenkins.io/war/2.373/jenkins.war
-      dest: /opt/tomcat/webapps/
+      url: "{{ jenkins_link }}"
+      dest: "{{ jenkins_webapp }}"
       owner: root
       group: root
       mode: 0755 
